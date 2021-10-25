@@ -42,9 +42,6 @@ section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
     HOID.WalkSpeed = k
 end)
 
-section2:addToggle("Loop Speed", false, function(m)
-    getgenv().loopwalkspeed = m
-end)
 -- MISC SECTION
 
 -- LOAD
@@ -69,11 +66,5 @@ while wait() do
                 wait(3)
             end
         end
-    end
-end
-
-while wait() do
-    if getgenv().loopwalkspeed == true then
-        HOID.WalkSpeed = speed
     end
 end
