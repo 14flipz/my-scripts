@@ -108,8 +108,5 @@ while wait() do
                 game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer(unpack(GetQuest2))
             until LP.UnsavedData.JobChoosed.Value == 'Package Delivery'
         end
-        if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
-            local orginalposition = HRP.CFrame
-            HRP.CFrame = CFrame.new(orginalposition)
     end
 end
