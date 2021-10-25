@@ -26,6 +26,31 @@ local GetQuest2 = {
 local deliv = false
 local speed = 0
 getgenv().loopwalkspeed = false
+local bummer = {
+356936987,
+56284531,
+30172386,
+39716311,
+2747103400,
+168151412,
+1055203349,
+80484813,
+2937012,
+1288490322,
+165185642,
+36241978,
+212717622,
+77577101,
+15504707,
+335213066,
+336289281,
+1949561805,
+228514574,
+117510038,
+130322299,
+33424819,
+84264466
+}
 
 -- MONEY SECTION
 section1:addButton("Teleport to Delivery Job", function()
@@ -54,21 +79,37 @@ section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
     HOID.WalkSpeed = k
 end)
 
+section2:addButton("Anti-Mod", function()
+    for _,v in next, game.Players:GetPlayers() do
+        for _,b in next, bummer do
+            if v.UserId == b then game.Players.LocalPlayer:Kick("Mod Detected!") end
+        end
+    end
+    game.Players.PlayerAdded:Connect(function()
+        for _,b in next, bummer do
+            if v.UserId == b then game.Players.LocalPlayer:Kick("Mod Detected!") end
+        end 
+    end)
+    venyx:Notify("Anti-Mod Loaded!", "Anti-Mod May Not Be 100%!", p)
+end)
+
 -- MISC SECTION
 
 -- LOAD
 venyx:SelectPage(venyx.pages[1], true)
 
 -- SCRIPT
-
-
 while wait() do
     if deliv == true then
         if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
-            game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(unpack(GetQuest1))
-            wait(1)
-            game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer(unpack(GetQuest2))
-                wait()
+            repeat
+                game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(unpack(GetQuest1))
+                wait(1)
+                game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer(unpack(GetQuest2))
+            until LP.UnsavedData.JobChoosed.Value == 'Package Delivery'
         end
+        if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
+            local orginalposition = HRP.CFrame
+            HRP.CFrame = CFrame.new(orginalposition)
     end
 end
