@@ -32,18 +32,20 @@ section1:addButton("Teleport to Delivery Job", function()
 HRP.CFrame = CFrame.new(-709, -33, 2363)
 end)
 
-section1:addToggle("Auto Delivery Job", nil, function(value)
+section1:addToggle("Auto Get Delivery Job Quest", nil, function(value)
     deliv = value
 end)
 
-section1:addButton("Manual Do Delivery", function()
-    for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
-        if v:IsA("TouchTransmitter") then
-            firetouchinterest(HRP, v.Parent, 0)
-            wait()
-            firetouchinterest(HRP, v.Parent, 1)
+section1:addButton("Auto Do Delivery", function()
+    game:GetService"RunService".RenderStepped:Connect(function()
+        for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
+            if v:IsA("TouchTransmitter") then
+                firetouchinterest(HRP, v.Parent, 0)
+                wait()
+                firetouchinterest(HRP, v.Parent, 1)
+            end
         end
-    end
+    end)
 end)
 
 -- CHARACTER SECTION
@@ -63,18 +65,10 @@ venyx:SelectPage(venyx.pages[1], true)
 while wait() do
     if deliv == true then
         if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
-                game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(unpack(GetQuest1))
-                wait(1)
-                game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer(unpack(GetQuest2))
+            game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(unpack(GetQuest1))
+            wait(1)
+            game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer(unpack(GetQuest2))
                 wait()
-            end
-        for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
-            if v:IsA("TouchTransmitter") then
-                firetouchinterest(HRP, v.Parent, 0)
-                wait(1)
-                firetouchinterest(HRP, v.Parent, 1)
-                wait(2)
-            end
         end
     end
 end
