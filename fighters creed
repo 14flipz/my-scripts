@@ -45,11 +45,13 @@ section1:addButton("Manual Do Delivery", function()
         end
     end
 end)
+
 -- CHARACTER SECTION
 section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
     speed = k
     HOID.WalkSpeed = k
 end)
+
 -- MISC SECTION
 
 -- LOAD
@@ -69,9 +71,9 @@ while wait() do
         for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
             if v:IsA("TouchTransmitter") then
                 firetouchinterest(HRP, v.Parent, 0)
-                wait()
+                wait(1)
                 firetouchinterest(HRP, v.Parent, 1)
-                wait(3)
+                wait(2)
             end
         end
     end
