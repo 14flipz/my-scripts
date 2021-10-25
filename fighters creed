@@ -1,13 +1,21 @@
+repeat
+    wait()
+until game:IsLoaded()
+
+-- UI
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
 local venyx = library.new("flipz hub", 5013109572)
--- UI
 
-local page = venyx:addPage("Money", 5012544693)
-local section1 = page:addSection("Delivery Job")
 -- PAGES AND SECTIONS
+local page = venyx:addPage("Money", 5012544693)
+local page2 = venyx:addPage("Character", 5012544693)
+local section1 = page:addSection("Delivery Job")
+local section2 = page2:addSection("WalkSpeed")
 
+-- LOCALS
 local LP = game.Players.LocalPlayer
 local HRP = LP.Character.HumanoidRootPart
+local HOID = LP.Character.Humanoid
 local GetQuest1 = {
     [1] = workspace.GeneralFunctionality.NPCs.Luigi
 }
@@ -16,9 +24,10 @@ local GetQuest2 = {
     [2] = 1
 }
 local deliv = false
+local speed = 0
+getgenv().loopwalkspeed = false
 
--- LOCALS
-
+-- MONEY SECTION
 section1:addButton("Teleport to Delivery Job", function()
 HRP.CFrame = CFrame.new(-709, -33, 2363)
 end)
@@ -27,10 +36,23 @@ section1:addToggle("Auto Delivery Job", nil, function(value)
     deliv = value
 end)
 
+-- CHARACTER SECTION
+section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
+    speed = k
+    HOID.WalkSpeed = k
+end)
+
+section2:addToggle("Loop Speed", false, function(m)
+    getgenv().loopwalkspeed = m
+end)
+-- MISC SECTION
+
 -- LOAD
 venyx:SelectPage(venyx.pages[1], true)
 
 -- SCRIPT
+
+
 while wait() do
     if deliv == true then
         if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
@@ -42,10 +64,16 @@ while wait() do
         for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
             if v:IsA("TouchTransmitter") then
                 firetouchinterest(HRP, v.Parent, 0)
-                wait()
+                wait(1)
                 firetouchinterest(HRP, v.Parent, 1)
-                wait(2)
+                wait(3)
             end
         end
+    end
+end
+
+while wait() do
+    if getgenv().loopwalkspeed == true then
+        HOID.WalkSpeed = speed
     end
 end
