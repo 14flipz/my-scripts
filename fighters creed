@@ -159,7 +159,7 @@ while wait() do
             game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer("Combat", true)
             wait(0.2)
             game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
-            wait(0.7)
+            wait(0.8)
         end
         if getgenv().autoDrink == true and HOID.Health <= 20 then
                 if LP.Backpack:FindFirstChild(getgenv().whatToDrink) then
@@ -175,7 +175,7 @@ while wait() do
                 game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer(getgenv().whatToEat, true)
                 wait(0.1)
                 game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToEat, true)
-                task.wait(4)
+                task.wait(5)
                 getgenv().autoPunch = true
             end
         end
