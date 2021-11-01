@@ -203,7 +203,7 @@ section5:addToggle("Auto-Drink When Low HP", false, function(m)
     getgenv().autoDrink = m
 end)
 
-section5:addSlider("Drink At Health", 20, 0, maxHealth, function(lolezez)
+section5:addSlider("Drink Below Health", 20, 0, maxHealth, function(lolezez)
     LowValue = lolezez
 end)
 
