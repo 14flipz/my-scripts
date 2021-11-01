@@ -17,6 +17,7 @@ local section3 = page3:addSection("Durability Farm")
 local section4 = page3:addSection("Auto-Eat")
 local section5 = page3:addSection("Auto-Drink")
 local section6 = page4:addSection("Teleport")
+local section7 = page2:addSection("Character")
 
 -- LOCALS
 local LP = game.Players.LocalPlayer
@@ -57,6 +58,7 @@ local bummer = {
 }
 
 getgenv().deliv = false
+getgenv().autoDestroy = false
 
 getgenv().autoDura = false
 getgenv().autoEat = false
@@ -94,13 +96,27 @@ section1:addButton("Auto Do Delivery", function()
     end)
 end)
 
--- CHARACTER SECTION
-section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
-    speed = k
-    HOID.WalkSpeed = k
+section1:addToggle("Auto-Remove Package", false, function(retardeddevs)
+getgenv().autoDestroy = retardeddevs
+    while wait() do
+        if getgenv().autoDestroy == true then
+            for i, v in pairs(LP.Character:GetChildren()) do
+                if v.Name == "DeliveryPackage" and v.Parent.Name == LP.Name then
+                    v:Destroy()
+                end
+            end
+        end
+    end
 end)
 
-section2:addButton("Anti-Mod", function()
+section1:addButton("Remove Confetti", false, function(ez)
+    for i, v in pairs(game:GetService("ReplicatedStorage").LocalAsset.VFX.Confetti:GetChildren()) do
+        v:Destroy()
+    end
+end)
+
+-- CHARACTER SECTION'
+section7:addButton("Anti-Mod", function()
     for _,v in next, game.Players:GetPlayers() do
         for _,b in next, bummer do
             if v.UserId == b then game.Players.LocalPlayer:Kick("Mod Detected!") end
@@ -114,9 +130,22 @@ section2:addButton("Anti-Mod", function()
     venyx:Notify("Anti-Mod Loaded!", "Anti-Mod May Not Be 100%!", p)
 end)
 
-section2:addButton("Remove Name", function()
+section7:addButton("Remove Name", function()
     Char.Head.NameTag:Destroy()
+    venyx:Notify("Remove Name Loaded!", "Name isn't visible", mp)
 end)
+
+section7:addButton("Anti-AFK", function()
+    for i,v in pairs(getconnections(LP.Idled)) do
+        v:Disable()
+    end
+    venyx:Notify("Anti-AFK Loaded!", "             ", ml)
+end)
+
+section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
+    HOID.WalkSpeed = k
+end)
+
 
 -- TRAINING SECTION
 section3:addToggle("Auto-Dura Farm", false, function(y)
@@ -142,7 +171,7 @@ end)
 
 -- TELEPORT SECTION
 section6:addButton("Delivery Job", function()
-    HRP.CFrame = CFrame.new(-709, -33, 2363)
+    HRP.CFrame = CFrame.new(519, 10, 2663)
 end)
 
 section6:addButton("Gym", function()
