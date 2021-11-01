@@ -64,6 +64,8 @@ getgenv().autoEat = false
 getgenv().autoDrink = false
 getgenv().autoPunch = false
 
+getgenv().GripKick = false
+
 getgenv().whatToDrink = "Strawberry Milkshake"
 getgenv().whatToEat = "Green Tea Mochi"
 
@@ -110,6 +112,18 @@ game:GetService"RunService".RenderStepped:Connect(function()
 end)
 
 -- CHARACTER SECTION
+section7:addToggle("Kick when gripped", nil, function(lee)
+getgenv().GripKick = lee
+while wait() do
+    if getgenv().GripKick == true then
+        LP.CharacterAdded:Connect(function()
+        wait(2)
+        LP:Kick()
+    end)
+end
+end
+end)
+
 section7:addButton("Reset Character", function()
     HOID.Health = 0
 end)
