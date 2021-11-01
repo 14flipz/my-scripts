@@ -69,13 +69,17 @@ getgenv().GripKick = false
 getgenv().whatToDrink = "Strawberry Milkshake"
 getgenv().whatToEat = "Green Tea Mochi"
 
+getgenv().clip = false
+
+local Noclipping = nil
+
 -- MONEY SECTION
 section1:addToggle("Auto Get Delivery Job Quest", nil, function(value)
 getgenv().deliv = value
     while wait() do
     if getgenv().deliv == true then
         if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
-            SavedPosition = HRP.CFrame
+            game:GetService('RunService').Stepped:Connect(NoclipLoop)
             HRP.CFrame = CFrame.new(389.371, -32.6551, 2522)
             repeat
                 game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(workspace.GeneralFunctionality.NPCs.Luigi)
@@ -87,6 +91,23 @@ getgenv().deliv = value
         end
     end
 end
+end)
+
+section1:addToggle("Noclip", nil, function(value)
+getgenv().clip = value
+    local function NoclipLoop()
+        if getgenv().clip == true then
+            for i, v in pairs(Char:GetDescendants()) do
+                if v:IsA("BasePart") and v.CanCollide == true then
+                    v.CanCollide = false
+                end
+            end
+        end
+    end
+    Noclipping = game:GetService('RunService').Stepped:Connect(NoclipLoop)
+    if getgenv().clip == false and Noclipping then
+		Noclipping:Disconnect()
+	end
 end)
 
 section1:addButton("Auto Do Delivery", function()
