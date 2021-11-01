@@ -58,7 +58,6 @@ local bummer = {
 }
 
 getgenv().deliv = false
-getgenv().autoDestroy = false
 
 getgenv().autoDura = false
 getgenv().autoEat = false
@@ -74,11 +73,15 @@ getgenv().deliv = value
     while wait() do
     if getgenv().deliv == true then
         if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
+            SavedPosition = HRP.CFrame
+            HRP.CFrame = CFrame.new(389.371, -32.6551, 2522)
             repeat
                 game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(workspace.GeneralFunctionality.NPCs.Luigi)
                 wait(1)
                 game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer("1", 1)
             until LP.UnsavedData.JobChoosed.Value == 'Package Delivery'
+            HRP.CFrame = CFrame.new(838, -33, 2698)
+            wait(2)
         end
     end
 end
@@ -96,23 +99,14 @@ section1:addButton("Auto Do Delivery", function()
     end)
 end)
 
-section1:addToggle("Auto-Remove Package", false, function(retardeddevs)
-getgenv().autoDestroy = retardeddevs
-    while wait() do
-        if getgenv().autoDestroy == true then
-            for i, v in pairs(LP.Character:GetChildren()) do
-                if v.Name == "DeliveryPackage" and v.Parent.Name == LP.Name then
-                    v:Destroy()
-                end
+section1:addButton("Auto-Remove Package", function(retardeddevs)
+game:GetService"RunService".RenderStepped:Connect(function()
+    for i, v in pairs(LP.Character:GetChildren()) do
+        if v.Name == "DeliveryPackage" and v.Parent.Name == LP.Name then
+            v:Destroy()
             end
         end
-    end
-end)
-
-section1:addButton("Remove Confetti", false, function(ez)
-    for i, v in pairs(game:GetService("ReplicatedStorage").LocalAsset.VFX.Confetti:GetChildren()) do
-        v:Destroy()
-    end
+    end)
 end)
 
 -- CHARACTER SECTION'
