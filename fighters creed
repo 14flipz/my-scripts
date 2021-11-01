@@ -109,7 +109,11 @@ game:GetService"RunService".RenderStepped:Connect(function()
     end)
 end)
 
--- CHARACTER SECTION'
+-- CHARACTER SECTION
+section7:addButton("Reset Character", function()
+    HOID.Health = 0
+end)
+
 section7:addButton("Anti-Mod", function()
     for _,v in next, game.Players:GetPlayers() do
         for _,b in next, bummer do
@@ -188,7 +192,7 @@ while wait() do
                 if LP.Backpack:FindFirstChild(getgenv().whatToDrink) then
                     getgenv().autoPunch = false
                     game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer(getgenv().whatToDrink, true)
-                    wait(0.1)
+                    wait(0.35)
                     game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToDrink, true)
                     task.wait(3)
                 end
@@ -196,7 +200,7 @@ while wait() do
         if getgenv().autoEat == true and HOID.Health == HOID.MaxHealth then
             if LP.Backpack:FindFirstChild(getgenv().whatToEat) then
                 game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer(getgenv().whatToEat, true)
-                wait(0.1)
+                wait(0.35)
                 game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToEat, true)
                 task.wait(5)
                 getgenv().autoPunch = true
