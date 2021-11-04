@@ -11,7 +11,7 @@ local venyx = library.new("flipz hub", 5013109572)
 -- PAGES AND SECTIONS
 local page = venyx:addPage("Money")
 local page2 = venyx:addPage("Character")
-local page3 = venyx:addPage("Training")
+local page3 = venyx:addPage("Durability Farm")
 local page4 = venyx:addPage("Teleport")
 local page5 = venyx:addPage("Auto Buy")
 local section1 = page:addSection("Delivery Job")
@@ -21,7 +21,7 @@ local section4 = page3:addSection("Auto-Eat")
 local section5 = page3:addSection("Auto-Drink")
 local section6 = page4:addSection("Teleport")
 local section7 = page2:addSection("Character")
-local section8 = page3:addSection("Punch Delay")
+local section8 = page3:addSection("Extra")
 local section9 = page5:addSection("Green-Tea Mochi")
 
 -- LOCALS
@@ -209,7 +209,7 @@ section5:addToggle("Auto-Drink When Low HP", false, function(m)
     getgenv().autoDrink = m
 end)
 
-section5:addSlider("Drink Below Health", 0, 0, maxHealth, function(lolezez)
+section8:addSlider("Drink/Stop Punching Below Health", 0, 0, maxHealth, function(lolezez)
     LowValue = lolezez
 end)
 
@@ -231,6 +231,22 @@ end)
 
 section6:addButton("Gym", function()
     HRP.CFrame = CFrame.new(-322, -64, 2223)
+end)
+
+section6:addButton("Hospital", function()
+    HRP.CFrame = CFrame.new(-47, -33, 2782)
+end)
+
+section6:addButton("Gas Station", function()
+    HRP.CFrame = CFrame.new(9, 3, 2312)
+end)
+
+section6:addButton("Drip R Us / Macdonalds", function()
+    HRP.CFrame = CFrame.new(402, -33, 2300)
+end)
+
+section6:addButton("Vendett's Gears", function()
+    HRP.CFrame = CFrame.new(102, 5, 1809)
 end)
 
 -- AUTO BUY section6
@@ -263,10 +279,15 @@ while wait() do
                 task.wait(5)
             end
         end
-        if LP.Backpack:FindFirstChild("Combat") then
-            HOID:EquipTool(LP.Backpack.Combat)
-            game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
-            wait(PunchWait)
+        if HOID.Health <= LowValue then
+            repeat
+                wait()
+            until HOID.Health == HOID.MaxHealth
+        else
+            if LP.Backpack:FindFirstChild("Combat") then
+                game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
+                wait(PunchWait)
+            end
         end
     end
 end
