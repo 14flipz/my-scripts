@@ -2,7 +2,7 @@ repeat
     wait()
 until game:IsLoaded()
 
-wait(6)
+wait(7)
 
 -- UI
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
@@ -13,6 +13,7 @@ local page = venyx:addPage("Money")
 local page2 = venyx:addPage("Character")
 local page3 = venyx:addPage("Training")
 local page4 = venyx:addPage("Teleport")
+local page5 = venyx:addPage("Auto Buy")
 local section1 = page:addSection("Delivery Job")
 local section2 = page2:addSection("WalkSpeed")
 local section3 = page3:addSection("Durability Farm")
@@ -21,6 +22,7 @@ local section5 = page3:addSection("Auto-Drink")
 local section6 = page4:addSection("Teleport")
 local section7 = page2:addSection("Character")
 local section8 = page3:addSection("Punch Delay")
+local section9 = page5:addSection("Green-Tea Mochi")
 
 -- LOCALS
 local LP = game.Players.LocalPlayer
@@ -59,7 +61,9 @@ local bummer = {
     117510038,
     130322299,
     33424819,
-    84264466
+    84264466,
+    669152307,
+    2428459519
 }
 
 getgenv().deliv = false
@@ -73,6 +77,8 @@ getgenv().GripKick = false
 
 getgenv().whatToDrink = "Strawberry Milkshake"
 getgenv().whatToEat = "Green Tea Mochi"
+
+getgenv().buyMochi = false
 
 getgenv().clip = false
 
@@ -92,7 +98,7 @@ getgenv().deliv = value
                 game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer("1", 1)
             until LP.UnsavedData.JobChoosed.Value == 'Package Delivery'
             HRP.CFrame = CFrame.new(838, -33, 2698)
-            wait(2)
+            wait(4)
         end
     end
 end
@@ -203,7 +209,7 @@ section5:addToggle("Auto-Drink When Low HP", false, function(m)
     getgenv().autoDrink = m
 end)
 
-section5:addSlider("Drink Below Health", 20, 0, maxHealth, function(lolezez)
+section5:addSlider("Drink Below Health", 0, 0, maxHealth, function(lolezez)
     LowValue = lolezez
 end)
 
@@ -227,35 +233,40 @@ section6:addButton("Gym", function()
     HRP.CFrame = CFrame.new(-322, -64, 2223)
 end)
 
+-- AUTO BUY section6
+section9:addToggle("Auto Buy Mochi", nil, function(value)
+getgenv().buyMochi = value
+while wait() do
+    if getgenv().buyMochi == true then
+        game:GetService("ReplicatedStorage").LocalAsset.Events.CEOs.PromptPurchaseItem:FireServer(workspace:FindFirstChild("CEOs Functionality"):FindFirstChild("Mochi Shop").Items.ItemPlaceHolder, 1)
+    end
+end
+end)
+
 -- LOAD
 venyx:SelectPage(venyx.pages[1], true)
 
 -- SCRIPT
 while wait() do
     if getgenv().autoDura == true then
-        if getgenv().autoPunch == true then
-            game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer("Combat", true)
-            wait(0.2)
-            game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
-            wait(PunchWait)
-        end
-        if getgenv().autoDrink == true and HOID.Health <= LowValue then
-                if LP.Backpack:FindFirstChild(getgenv().whatToDrink) then
-                    getgenv().autoPunch = false
-                    game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer(getgenv().whatToDrink, true)
-                    wait(0.35)
-                    game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToDrink, true)
-                    task.wait(3)
-                end
-            end
         if getgenv().autoEat == true and HOID.Health == HOID.MaxHealth then
             if LP.Backpack:FindFirstChild(getgenv().whatToEat) then
-                game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer(getgenv().whatToEat, true)
-                wait(0.35)
+                HOID:EquipTool(LP.Backpack[getgenv().whatToEat])
                 game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToEat, true)
                 task.wait(5)
-                getgenv().autoPunch = true
             end
+        end
+        if getgenv().autoDrink == true and HOID.Health <= LowValue then
+            if LP.Backpack:FindFirstChild(getgenv().whatToDrink) then
+                HOID:EquipTool(LP.Backpack[getgenv().whatToDrink])
+                game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToDrink, true)
+                task.wait(5)
+            end
+        end
+        if LP.Backpack:FindFirstChild("Combat") then
+            HOID:EquipTool(LP.Backpack.Combat)
+            game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
+            wait(PunchWait)
         end
     end
 end
