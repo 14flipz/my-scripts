@@ -2,7 +2,19 @@ repeat
     wait()
 until game:IsLoaded()
 
-wait(7)
+wait(5)
+
+for i, v in pairs(game:GetService("Workspace")["CEOs Functionality"]["Mochi Shop"].Items:GetDescendants()) do
+    if v:IsA("StringValue") and v.Value == 'Green Tea Mochi' then
+        v.Parent.Parent.Name = 'GreenTeaMochi'
+    end
+end
+
+for i, v in pairs(game:GetService("Workspace")["CEOs Functionality"]["Mochi Shop"].Items:GetDescendants()) do
+    if v:IsA("StringValue") and v.Value == 'Strawberry Milkshake' then
+        v.Parent.Parent.Name = 'StrawberryMilkshake'
+    end
+end
 
 -- UI
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
@@ -11,18 +23,26 @@ local venyx = library.new("flipz hub", 5013109572)
 -- PAGES AND SECTIONS
 local page = venyx:addPage("Money")
 local page2 = venyx:addPage("Character")
-local page3 = venyx:addPage("Durability Farm")
+local page3 = venyx:addPage("Dura Farm")
+local page7 = venyx:addPage("Stamina Farm")
 local page4 = venyx:addPage("Teleport")
 local page5 = venyx:addPage("Auto Buy")
+local page6 = venyx:addPage("Stats")
+local page8 = venyx:addPage("Misc")
 local section1 = page:addSection("Delivery Job")
 local section2 = page2:addSection("WalkSpeed")
-local section3 = page3:addSection("Dura Farm")
+local section3 = page3:addSection("Durability Farm")
 local section4 = page3:addSection("Auto-Eat")
 local section5 = page3:addSection("Auto-Drink")
 local section6 = page4:addSection("Teleport")
 local section7 = page2:addSection("Character")
 local section8 = page3:addSection("Extra")
 local section9 = page5:addSection("Green-Tea Mochi")
+local section10 = page6:addSection("Stats")
+local section11 = page7:addSection("Stamina Farm")
+local section12 = page7:addSection("Auto-Eat")
+local section13 = page7:addSection("Auto-Drink")
+local section14 = page8:addSection("Toggle GUI")
 
 -- LOCALS
 local LP = game.Players.LocalPlayer
@@ -30,78 +50,58 @@ local HRP = LP.Character.HumanoidRootPart
 local HOID = LP.Character.Humanoid
 local Char = LP.Character
 local maxHealth = HOID.MaxHealth
-local currentStamina = LP.SavedData.CurrentStamina
-local currentHunger = LP.SavedData.CurrentHunger
-local currentHydration = LP.SavedData.CurrentHydration
-local maxStamina = LP.SavedData.Stamina
-local membership = LP.SavedData.GymMemberShip
+local currentStam = LP.SavedData.CurrentStamina.Value
+local currentHunger = LP.SavedData.CurrentHunger.Value
+local currentHydration = LP.SavedData.CurrentHydration.Value
+local maxStamina = LP.SavedData.Stamina.Value
+local membership = LP.SavedData.GymMemberShip.Value
 local speed = 0
 local PunchWait = nil
 local LowValue = nil
-local bummer = {
-    356936987,
-    56284531,
-    30172386,
-    39716311,
-    2747103400,
-    168151412,
-    1055203349,
-    80484813,
-    2937012,
-    1288490322,
-    165185642,
-    36241978,
-    212717622,
-    77577101,
-    15504707,
-    335213066,
-    336289281,
-    1949561805,
-    228514574,
-    117510038,
-    130322299,
-    33424819,
-    84264466,
-    669152307,
-    2428459519
-}
+local Noclipping = nil
+local statDurability = LP.SavedData.Durability.Value
+local statStrength = LP.SavedData.Strength.Value
+local statSpeed = LP.SavedData.Speed.Value
+local statStamina = LP.SavedData.Stamina.Value
+local statRefreshDelay = nil
+local ezformat = '%s'
+local lowStaminaFarm = nil
 
-getgenv().deliv = false
-
-getgenv().autoDura = false
-getgenv().autoEat = false
-getgenv().autoDrink = false
-getgenv().autoPunch = false
-
-getgenv().GripKick = false
-
+getgenv().deliv = nil
+getgenv().AutoDeliv = nil
+getgenv().autoDura = nil
+getgenv().autoEat = nil
+getgenv().autoDrink = nil
+getgenv().GripKick = nil
 getgenv().whatToDrink = "Strawberry Milkshake"
 getgenv().whatToEat = "Green Tea Mochi"
-
-getgenv().buyMochi = false
-
-getgenv().clip = false
-
-local Noclipping = nil
+getgenv().buyGreenTeaMochi = nil
+getgenv().buyStrawberryMilkShake = nil
+getgenv().clip = nil
+getgenv().autoStam = nil
+getgenv().autoStamDrink = nil
+getgenv().autoStamEat = nil
+getgenv().whatToDrinkStam = nil
+getgenv().whatToEatStamFarm = nil
 
 -- MONEY SECTION
 section1:addToggle("Auto Get Delivery Job Quest", nil, function(value)
-getgenv().deliv = value
-    while wait() do
-    if getgenv().deliv == true then
-        if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
-            game:GetService('RunService').Stepped:Connect(NoclipLoop)
-            HRP.CFrame = CFrame.new(389.371, -32.6551, 2522)
+    getgenv().deliv = value
+        while wait() do
+        if getgenv().deliv == true then
+            if LP.UnsavedData.JobChoosed.Value ~= 'Package Delivery' then
+                game:GetService('RunService').Stepped:Connect(NoclipLoop)
+                HRP.CFrame = CFrame.new(389.371, -32.6551, 2522)
             repeat
                 game:GetService("ReplicatedStorage").LocalAsset.Events.StartDialog:FireServer(workspace.GeneralFunctionality.NPCs.Luigi)
-                wait(1)
                 game:GetService("ReplicatedStorage").LocalAsset.Events.DialogChoosed:FireServer("1", 1)
+                wait(0.5)
             until LP.UnsavedData.JobChoosed.Value == 'Package Delivery'
-            HRP.CFrame = CFrame.new(838, -33, 2698)
-            wait(4)
+                HRP.CFrame = CFrame.new(838, -33, 2698)
+                wait(3.5)
+            end
         end
     end
-end
 end)
 
 section1:addToggle("Noclip", nil, function(value)
@@ -115,22 +115,29 @@ getgenv().clip = value
             end
         end
     end
-    Noclipping = game:GetService('RunService').Stepped:Connect(NoclipLoop)
+Noclipping = game:GetService('RunService').Stepped:Connect(NoclipLoop)
     if getgenv().clip == false and Noclipping then
 		Noclipping:Disconnect()
 	end
 end)
 
-section1:addButton("Auto Do Delivery", function()
-    game:GetService"RunService".RenderStepped:Connect(function()
-        for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
-            if v:IsA("TouchTransmitter") then
-                firetouchinterest(HRP, v.Parent, 0)
-                wait()
-                firetouchinterest(HRP, v.Parent, 1)
+section1:addToggle("Auto Do Delivery", nil, function(value)
+getgenv().AutoDeliv = value
+    local function DelivLoop()
+        if getgenv().AutoDeliv == true then
+            for i, v in pairs(game:GetService("Workspace").GeneralFunctionality.JobsFolder:GetDescendants()) do
+                if v:IsA("TouchTransmitter") then
+                    firetouchinterest(HRP, v.Parent, 0)
+                    wait()
+                    firetouchinterest(HRP, v.Parent, 1)
+                end
             end
         end
-    end)
+    end
+DoDelivery = game:GetService('RunService').Stepped:Connect(DelivLoop)
+    if getgenv().AutoDeliv == false and DoDelivery then
+        DoDelivery:Disconnect()
+    end
 end)
 
 section1:addButton("Auto-Remove Package", function(retardeddevs)
@@ -146,13 +153,13 @@ end)
 -- CHARACTER SECTION
 section7:addToggle("Kick when gripped", nil, function(lee)
 getgenv().GripKick = lee
-while wait() do
-    if getgenv().GripKick == true then
-        LP.CharacterAdded:Connect(function()
-        wait(2)
-        LP:Kick()
-    end)
-end
+    while wait() do
+        if getgenv().GripKick == true then
+            LP.CharacterAdded:Connect(function()
+            wait(2)
+            LP:Kick()
+        end)
+    end
 end
 end)
 
@@ -161,16 +168,17 @@ section7:addButton("Reset Character", function()
 end)
 
 section7:addButton("Anti-Mod", function()
-    for _,v in next, game.Players:GetPlayers() do
-        for _,b in next, bummer do
-            if v.UserId == b then game.Players.LocalPlayer:Kick("Mod Detected!") end
+local mods = {"JaymzXVI", "HiddenPandas", "Phojandj", "MellyDaMxnace", "DemsPrep", "zzaxiid", "Arzziie", "AdventGhosty", "Fenhdlol", "FestiveSuperdoge", "Jayden98768", "BBumeo", "ASFIARMYDUDE12345", "FuelYaK", "TheNotDave", "AdventJosh", "petersumo002", "PumpYaK", "Ashura_Holder"}
+    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+        if table.find(mods, v.Name) then
+            game:GetService("Players").LocalPlayer:Kick(v.Name.." is in your server! (Mod)")
         end
     end
-    game.Players.PlayerAdded:Connect(function()
-        for _,b in next, bummer do
-            if v.UserId == b then game.Players.LocalPlayer:Kick("Mod Detected!") end
-        end 
-    end)
+game:GetService("Players").PlayerAdded:Connect(function(a)
+    if table.find(mods, a.Name) then
+        game:GetService("Players").LocalPlayer:Kick(a.Name.." is in your server! (Mod)")
+    end
+end)
     venyx:Notify("Anti-Mod Loaded!", "Anti-Mod May Not Be 100%!")
 end)
 
@@ -191,17 +199,12 @@ section2:addSlider("WalkSpeed Value", 16, 0, 300, function(k)
 end)
 
 
--- TRAINING SECTION
-section3:addToggle("Auto-Dura Farm", false, function(y)
-    getgenv().autoDura = y
-end)
-
-
+-- DURA SECTION
 section4:addToggle("Auto-Eat When Full HP", false, function(z)
     getgenv().autoEat = z
 end)
 
-section4:addDropdown("What To Eat", {"Green Tea Mochi", "Protein Bar", "Horchate"}, function(g)
+section4:addDropdown("What To Eat", {"Green Tea Mochi", "Protein Bar"}, function(g)
     getgenv().whatToEat = g
 end)
 
@@ -213,14 +216,96 @@ section8:addSlider("Drink/Stop Punching Below Health", 0, 0, maxHealth, function
     LowValue = lolezez
 end)
 
-section5:addDropdown("What To Drink When Low HP", {"Strawberry Milkshake", "Energy Drink", "Strawberry Flavoured Boba"}, function(r)
+section5:addDropdown("What To Drink When Low HP", {"Strawberry Milkshake", "Energy Drink", "Strawberry Flavoured Boba", "Horchate"}, function(r)
     getgenv().whatToDrink = r
 end)
 
-section8:addTextbox("Delay Between Punches", 0.2, function(zel, focusLost)
+section8:addTextbox("Punch Delay (seconds, too fast will kill you)", 0, function(zel, focusLost)
     PunchWait = zel
     if focusLost then
         venyx:Notify("Delay Set:", zel)
+    end
+end)
+
+section3:addToggle("Auto-Dura Farm", false, function(y)
+    getgenv().autoDura = y
+    while wait() do
+    if getgenv().autoDura == true then
+        if getgenv().autoEat == true and HOID.Health == HOID.MaxHealth then
+            if LP.Backpack:FindFirstChild(getgenv().whatToEat) then
+                HOID:EquipTool(LP.Backpack[getgenv().whatToEat])
+                game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToEat, true)
+                wait(5)
+            end
+        end
+        if getgenv().autoDrink == true and HOID.Health <= LowValue then
+            if LP.Backpack:FindFirstChild(getgenv().whatToDrink) then
+                HOID:EquipTool(LP.Backpack[getgenv().whatToDrink])
+                game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToDrink, true)
+                wait(7)
+            end
+        end
+        if HOID.Health <= LowValue then
+            repeat
+                wait()
+            until HOID.Health == HOID.MaxHealth
+        else
+            game:GetService("ReplicatedStorage").LocalAsset.Events.ToolInventory.ToggleTool:FireServer("Combat", true)
+            game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
+            wait(PunchWait)
+        end
+    end
+end
+end)
+
+-- STAMINA SECTION
+section12:addToggle("Auto-Eat When Max Stamina", nil, function(v)
+    getgenv().autoStamEat = v
+end)
+
+section12:addDropdown('What To Eat When Max Stamina', {"Green Tea Mochi", "Protein Bar"}, function(f)
+    getgenv().whatToEatStamFarm = f
+end)
+
+section13:addToggle("Auto-Drink When Low Stamina", nil, function(i)
+    getgenv().autoStamDrink = i
+end)
+
+section13:addDropdown("What To Drink When Low Stamina", {"Green Tea", "Strawberry Flavoured Boba", "Energy Drink"}, function(e)
+    getgenv().whatToDrinkStam = e
+end)
+
+section13:addSlider("Drink Below Stamina", 0, 0, maxStamina, function(s)
+    lowStaminaFarm = s
+end)
+
+section11:addToggle("Stamina Farm", nil, function(c)
+getgenv().autoStam = c
+    while wait() do
+        if getgenv().autoStam then
+            if getgenv().autoStamDrink == true and currentStam <= lowStaminaFarm then
+                if LP.Backpack:FindFirstChild(getgenv().whatToDrinkStam) then
+                    game:GetService("ReplicatedStorage").LocalAsset.Events.Sprint:FireServer(false)
+                    HOID:EquipTool(LP.Backpack[getgenv().whatToDrinkStam])
+                    game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToDrinkStam, true)
+                    wait(5)
+                end
+            end
+            if getgenv().autoStamEat == true and currentStam == maxStamina then
+                if LP.Backpack:FindFirstChild(getgenv().whatToEatStamFarm) then
+                    HOID:EquipTool(LP.Backpack[getgenv().whatToEatStamFarm])
+                    game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToEatStamFarm, true)
+                    wait(5)
+                end
+            end
+            if currentStam <= lowStaminaFarm then
+                repeat
+                    wait()
+                until currentStam == maxStamina
+            else
+                game:GetService("ReplicatedStorage").LocalAsset.Events.Sprint:FireServer(true)
+            end
+        end
     end
 end)
 
@@ -249,45 +334,70 @@ section6:addButton("Vendett's Gears", function()
     HRP.CFrame = CFrame.new(102, 5, 1809)
 end)
 
--- AUTO BUY section6
-section9:addToggle("Auto Buy Mochi", nil, function(value)
+-- AUTO BUY SECTION
+section9:addToggle("Auto Buy Green Tea Mochi", nil, function(value)
 getgenv().buyMochi = value
-while wait() do
-    if getgenv().buyMochi == true then
-        game:GetService("ReplicatedStorage").LocalAsset.Events.CEOs.PromptPurchaseItem:FireServer(workspace:FindFirstChild("CEOs Functionality"):FindFirstChild("Mochi Shop").Items.ItemPlaceHolder, 1)
+    while wait() do
+        if getgenv().buyMochi == true then
+            game:GetService("ReplicatedStorage").LocalAsset.Events.CEOs.PromptPurchaseItem:FireServer(workspace:FindFirstChild("CEOs Functionality"):FindFirstChild("Mochi Shop").Items.GreenTeaMochi, 1)
+            wait(1)
+        end
     end
-end
+end)
+
+section9:addToggle("Auto Buy Strawberry Milkshake", nil, function(value)
+getgenv().buyStrawberryMilkShake = value
+    while wait() do
+        if getgenv().buyStrawberryMilkShake == true then
+            game:GetService("ReplicatedStorage").LocalAsset.Events.CEOs.PromptPurchaseItem:FireServer(workspace:FindFirstChild("CEOs Functionality"):FindFirstChild("Mochi Shop").Items.StrawberryMilkshake, 1)
+            wait(1)
+        end
+    end
+end)
+
+-- STAT SECTION
+
+section10:addButton("Show Durability", function()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Durability:";
+        Text = string.format(ezformat, statDurability);
+        Icon = "";
+        Duration = 10;
+    })
+end)
+
+section10:addButton("Show Strength", function()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Strength:";
+        Text = string.format(ezformat, statStrength);
+        Icon = "";
+        Duration = 10;
+    })
+end)
+
+section10:addButton("Show Stamina", function()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Stamina:";
+        Text = string.format(ezformat, statStamina);
+        Icon = "";
+        Duration = 10;
+    })
+end)
+
+section10:addButton("Show Speed", function()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Speed:";
+        Text = string.format(ezformat, statSpeed);
+        Icon = "";
+        Duration = 10;
+    })
+end)
+
+-- MISC SECTION
+section14:addKeybind("Toggle Keybind", Enum.KeyCode.RightControl, function()
+    venyx:toggle()
+    end, function()
 end)
 
 -- LOAD
 venyx:SelectPage(venyx.pages[1], true)
-
--- SCRIPT
-while wait() do
-    if getgenv().autoDura == true then
-        if getgenv().autoEat == true and HOID.Health == HOID.MaxHealth then
-            if LP.Backpack:FindFirstChild(getgenv().whatToEat) then
-                HOID:EquipTool(LP.Backpack[getgenv().whatToEat])
-                game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToEat, true)
-                task.wait(5)
-            end
-        end
-        if getgenv().autoDrink == true and HOID.Health <= LowValue then
-            if LP.Backpack:FindFirstChild(getgenv().whatToDrink) then
-                HOID:EquipTool(LP.Backpack[getgenv().whatToDrink])
-                game:GetService("ReplicatedStorage").LocalAsset.Events.Consume:FireServer(getgenv().whatToDrink, true)
-                task.wait(5)
-            end
-        end
-        if HOID.Health <= LowValue then
-            repeat
-                wait()
-            until HOID.Health == HOID.MaxHealth
-        else
-            if LP.Backpack:FindFirstChild("Combat") then
-                game:GetService("ReplicatedStorage").LocalAsset.Events.CombatHit:FireServer("M1")
-                wait(PunchWait)
-            end
-        end
-    end
-end
