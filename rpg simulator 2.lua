@@ -19,14 +19,6 @@ local Main = {
     }
 }
 
-local Keys = {
-    "dereklol123"
-}
-
-if getgenv().key ~= Keys then
-    LocalPlayer:Kick("lol u cannot use flipz hub fag")
-end
-
 local Config = {
     WindowName = "flipz hub",
     Color = Color3.fromRGB(40, 45, 85),
