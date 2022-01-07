@@ -2,8 +2,6 @@ if not game:IsLoaded() then
     game.Loaded:Wait() 
 end
 
-getgenv().key = ''
-
 local Players = game:GetService("Players")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
