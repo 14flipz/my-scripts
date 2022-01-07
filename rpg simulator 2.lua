@@ -2,6 +2,8 @@ if not game:IsLoaded() then
     game.Loaded:Wait() 
 end
 
+getgenv().key = ''
+
 local Players = game:GetService("Players")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -20,7 +22,7 @@ local Main = {
 }
 
 local Keys = {
-    dereklol123
+    "dereklol123"
 }
 
 if getgenv().key ~= Keys then
