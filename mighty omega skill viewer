@@ -1,0 +1,38 @@
+local Config = {
+    WindowName = "flipz skill viewer",
+	Color = Color3.fromRGB(40, 45, 85),
+	Keybind = Enum.KeyCode.LeftControl
+}
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/AlexR32/Roblox/main/BracketV3.lua"))()
+local Window = Library:CreateWindow(Config, game:GetService("CoreGui"))
+
+local Players = game:GetService("Players")
+local Target
+
+local MainTab = Window:CreateTab("Main")
+local SkillSection = MainTab:CreateSection("Skill Viewer")
+
+local PlayerTextbox = SkillSection:CreateTextBox("Player Name", "Enter Player Name", false, function(string)
+    Target = string
+end)
+
+local PrintButton = SkillSection:CreateButton("Print Player Skills & Edits", function()
+    for _, Player in pairs(Players:GetChildren()) do
+        if Player.Name == Target then
+            for _, v in pairs(Player.Backpack:GetDescendants()) do
+                if v:IsA("BoolValue") and v.Name == "Skill" then
+                    print("----------------------------------------")
+                    print(v.Parent.Name)
+                    for _, z in pairs(v.Parent:GetDescendants()) do
+                        if z.Name == "Upgrades" then
+                            print(z.Parent.Name, ":", z.Parent.Value)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+PrintButton:AddToolTip("Press F9 To See Skills & Edits")
