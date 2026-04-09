@@ -1,24 +1,24 @@
 for i, v in pairs(game.Workspace:GetDescendants()) do
     if v:IsA("TextLabel") and v.Text == 'Clan Reroll (5k Fame)' then
-        v.Parent.Parent.Name = "NigNog"
+        v.Parent.Parent.Name = "Special"
     end
 end
--- Load and shi
+-- Load
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
-local venyx = library.new("flipz hot scripts for hot babes", 5013109572)
+local venyx = library.new("flipz script", 5013109572)
 
--- pages and shi
+-- pages
 local page = venyx:addPage("Main", 5012544693)
 local page2 = venyx:addPage("Misc", 5012544693)
 local section1 = page:addSection("AutoFarm")
 local section2 = page:addSection("Misc")
 local section3 = page2:addSection('Extra')
 
--- locals and shi
+-- locals
 local LP = game.Players.LocalPlayer
 local HRP = LP.Character.HumanoidRootPart
-local penis = game.Workspace.DeliverGrandma
+local clickT = game.Workspace.DeliverGrandma
 timer = 1.5
 
 local function Poster()
@@ -38,9 +38,9 @@ local function Dirt()
 end
 
 local function Grandma()
-    firetouchinterest(HRP, penis, 0)
+    firetouchinterest(HRP, clickT, 0)
     wait(1)
-    firetouchinterest(HRP, penis , 1)
+    firetouchinterest(HRP, clickT , 1)
 end
 
 local args = {
@@ -48,7 +48,7 @@ local args = {
 }
 
 
--- sections and shi
+-- sections
 section1:addButton("Slow/Safe Money Farm", function()
 while wait() do
     fireclickdetector(game:GetService("Workspace").Model.Model.QuestBoard.ClickDetector)
@@ -77,7 +77,7 @@ while wait() do
 end)
 
 section2:addButton("Reroll Clan", function()
-    fireclickdetector(game:GetService("Workspace").NigNog.ClickDetector)
+    fireclickdetector(game:GetService("Workspace").Special.ClickDetector)
 end)
 
 section2:addButton("Reset Character", function()
